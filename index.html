@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Eko Clínica — cuidado em saúde com acolhimento, atenção e orientação para agendar seu atendimento.">
+  <meta name="theme-color" content="#174a9a">
+  <title>Eko Clínica | Centro de Saúde</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Eko Clínica — início">
+      <span class="brand-mark" aria-hidden="true">✚</span>
+      <span class="brand-copy"><strong>EKO CLÍNICA</strong><small>CENTRO DE SAÚDE</small></span>
+    </a>
+    <nav class="nav" aria-label="Navegação principal">
+      <a href="#sobre">A clínica</a>
+      <a href="#atendimento">Agendamento</a>
+      <a class="nav-cta" href="https://wa.me/5583996809052" target="_blank" rel="noopener">Falar no WhatsApp</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <p class="eyebrow">Cuidado próximo, humano e responsável</p>
+        <h1>Excelência em saúde para cada fase da sua vida.</h1>
+        <p class="hero-text">Na Eko Clínica, queremos tornar seu caminho até o cuidado mais simples. Fale com nossa equipe para tirar dúvidas e solicitar um agendamento.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#atendimento">Solicitar atendimento</a>
+          <a class="button button-outline" href="https://wa.me/5583996809052" target="_blank" rel="noopener">Conversar no WhatsApp</a>
+        </div>
+        <p class="small-note">O agendamento será confirmado pela equipe. O envio do formulário não garante um horário.</p>
+      </div>
+      <div class="hero-card" aria-label="Informações para agendamento">
+        <div class="card-icon">♡</div>
+        <h2>Estamos aqui para ajudar.</h2>
+        <p>Conte como podemos orientar você e nossa equipe dará continuidade ao atendimento.</p>
+        <a class="text-link" href="#atendimento">Começar agendamento <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Compromissos da clínica">
+      <div><span class="trust-icon">✓</span><span><strong>Acolhimento</strong><small>Escuta e atenção</small></span></div>
+      <div><span class="trust-icon">✓</span><span><strong>Orientação</strong><small>Informações claras</small></span></div>
+      <div><span class="trust-icon">✓</span><span><strong>Agendamento simples</strong><small>Contato direto com a equipe</small></span></div>
+    </section>
+
+    <section class="about section" id="sobre">
+      <div>
+        <p class="eyebrow">Eko Clínica</p>
+        <h2>Seu cuidado começa com uma conversa.</h2>
+      </div>
+      <div class="about-copy">
+        <p>Queremos oferecer uma experiência de atendimento clara e acolhedora. Entre em contato para conhecer os atendimentos disponíveis, esclarecer dúvidas e verificar horários.</p>
+        <a class="text-link" href="https://wa.me/5583996809052" target="_blank" rel="noopener">Falar com a equipe <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="appointment section" id="atendimento">
+      <div class="appointment-intro">
+        <p class="eyebrow">Vamos conversar?</p>
+        <h2>Solicite seu agendamento</h2>
+        <p>Preencha os campos abaixo. O site abrirá uma conversa no WhatsApp com os dados que você informou para que possa concluir a solicitação com a equipe.</p>
+        <div class="privacy-note"><strong>Privacidade:</strong> não informe diagnóstico, exames ou outras informações clínicas sensíveis neste formulário. Os dados não são armazenados por este site; eles serão incluídos na mensagem do WhatsApp que você decidir enviar.</div>
+      </div>
+      <form class="appointment-form" id="appointment-form">
+        <label for="name">Seu nome</label>
+        <input id="name" name="name" autocomplete="name" required maxlength="100" placeholder="Como podemos chamar você?">
+
+        <div class="form-row">
+          <div>
+            <label for="phone">Seu telefone</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" required maxlength="30" placeholder="(83) 9 9999-9999">
+          </div>
+          <div>
+            <label for="email">Seu e-mail <span class="optional">(opcional)</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" maxlength="120" placeholder="voce@exemplo.com">
+          </div>
+        </div>
+
+        <label for="service">Qual atendimento deseja consultar?</label>
+        <select id="service" name="service" required>
+          <option value="">Selecione uma opção</option>
+          <option>Quero conhecer os atendimentos disponíveis</option>
+          <option>Quero solicitar um agendamento</option>
+          <option>Quero esclarecer uma dúvida</option>
+          <option>Outro assunto</option>
+        </select>
+
+        <button class="button button-primary button-full" type="submit">Continuar pelo WhatsApp <span aria-hidden="true">→</span></button>
+        <p class="form-feedback" id="form-feedback" role="status" aria-live="polite"></p>
+        <p class="small-note">Ao continuar, o WhatsApp será aberto para você revisar e enviar a mensagem.</p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand brand-footer" href="#inicio">
+      <span class="brand-mark" aria-hidden="true">✚</span>
+      <span class="brand-copy"><strong>EKO CLÍNICA</strong><small>CENTRO DE SAÚDE</small></span>
+    </a>
+    <p>Informação clara. Cuidado com acolhimento.</p>
+    <a href="https://wa.me/5583996809052" target="_blank" rel="noopener">WhatsApp da Eko Clínica</a>
+    <small>Este site não substitui avaliação profissional nem atendimento de urgência.</small>
+  </footer>
+
+  <a class="whatsapp-float" href="https://wa.me/5583996809052" target="_blank" rel="noopener" aria-label="Falar com a Eko Clínica pelo WhatsApp">
+    <span aria-hidden="true">✆</span><span>WhatsApp</span>
+  </a>
+  <script src="script.js"></script>
+</body>
+</html>
