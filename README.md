@@ -21,3 +21,23 @@ Abra `index.html` num navegador moderno. Para testar o formulário, use um dispo
 
 ## Liberdade e portabilidade
 O site usa arquivos abertos e pode ser hospedado em qualquer serviço que aceite arquivos estáticos. O conteúdo não depende de WordPress ou Elementor. A fonte tipográfica Inter é carregada do Google Fonts; se quiser evitar essa dependência externa, remova a linha `@import` de `styles.css` e o site usará fontes locais do sistema.
+
+
+## Landing pages de campanhas
+
+As cinco páginas de serviços ficam na pasta `campanhas/`. Cada página utiliza os arquivos compartilhados em `campanhas/assets/`.
+
+- Sedação Consciente: `campanhas/sedacao-consciente/`
+- Implantes Dentários: `campanhas/implantes-dentarios/`
+- Aparelhos Dentários: `campanhas/aparelhos-dentarios/`
+- Facetas em Resina: `campanhas/facetas-em-resina/`
+- Limpeza e Clareamento: `campanhas/limpeza-e-clareamento/`
+
+O formulário solicita somente o nome e abre o WhatsApp com mensagem pré-preenchida. O evento `form_start` mede a primeira interação e `whatsapp_handoff` mede a tentativa validada de encaminhamento. Nenhum desses eventos confirma mensagem enviada, conversa, agendamento ou venda.
+
+Antes de ativar anúncios:
+1. Confirmar o número do WhatsApp da clínica.
+2. Confirmar qual container GTM deve ser usado: há um identificador no site atual, mas a medição precisa ser testada no Tag Assistant.
+3. Instalar GTM apenas após essa confirmação e configurar GA4/Google Ads no container correto.
+4. Testar cada landing em celular e desktop.
+5. Confirmar com a clínica textos, serviços e regras de publicidade profissional.
