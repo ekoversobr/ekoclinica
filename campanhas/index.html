@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Entre em contato com a Eko Clínica e solicite informações sobre nossos serviços.">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Contato | Eko Clínica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/landing.css">
+  <!-- Instalar o GTM após confirmar o container correto da Eko Clínica. -->
+</head>
+<body>
+  <main class="landing">
+    <section class="card" aria-labelledby="form-title">
+      <a class="brand" href="../" aria-label="Eko Clínica">
+        <img src="../logo-eko-clinica.png" alt="Eko Clínica">
+      </a>
+      <h1 id="form-title">Preencha os dados para continuar</h1>
+      <form id="contact-form">
+        <label for="name">Seu Nome</label>
+        <input id="name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="Nome completo ou social" required>
+        <label for="subject">Assunto</label>
+        <select id="subject" name="subject" required>
+          <option value="">Selecione o assunto</option>
+          <option value="Agendamento" data-slug="agendamento">Agendamento</option>
+          <option value="Sedação" data-slug="sedacao">Sedação</option>
+          <option value="Implantes" data-slug="implantes">Implantes</option>
+          <option value="Aparelhos" data-slug="aparelhos">Aparelhos</option>
+          <option value="Limpeza" data-slug="limpeza">Limpeza</option>
+          <option value="Clareamento" data-slug="clareamento">Clareamento</option>
+          <option value="Pediatria" data-slug="pediatria">Pediatria</option>
+          <option value="Outras informações" data-slug="outras-informacoes">Outras informações</option>
+        </select>
+        <button type="submit" aria-label="Continuar pelo WhatsApp">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.02 3.2a12.3 12.3 0 0 0-10.5 18.7L3.8 28.8l7.1-1.9a12.3 12.3 0 1 0 5.1-23.7Zm0 22.3c-1.8 0-3.5-.5-5-1.4l-.4-.2-4.2 1.1 1.1-4.1-.3-.4a10 10 0 1 1 8.8 5Zm5.5-7.5c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.2 8.2 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.4.3-.6s0-.4 0-.6l-1-2.3c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.2-1.2 2.8 1.2 3.2 1.4 3.4c.2.2 2.4 3.7 5.8 5.1.8.4 1.4.5 1.9.7.8.2 1.5.2 2 .1.6-.1 1.8-.8 2.1-1.5s.3-1.4.2-1.5-.3-.2-.6-.4Z"/></svg>
+        </button>
+        <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      </form>
+      <p class="privacy">Você será encaminhado ao WhatsApp. Revise e envie a mensagem por lá.</p>
+    </section>
+  </main>
+  <script src="assets/landing.js" defer></script>
+</body>
+</html>
