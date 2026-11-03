@@ -39,7 +39,7 @@
       subject_slug:subjectSlug
     });
 
-    var message="Olá! Vim do anúncio do Google. Me chamo "+name+" e estou em busca de informações sobre "+subject+".";
+    var message="Olá, tudo bem? Me chamo "+name+" e vim do anúncio do Google e gostaria de informações.";
     window.location.href="https://wa.me/"+whatsapp+"?text="+encodeURIComponent(message);
   });
 })();
