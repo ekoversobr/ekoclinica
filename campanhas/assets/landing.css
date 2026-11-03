@@ -11,7 +11,7 @@ h1{font-size:clamp(1.9rem,6vw,2.6rem);line-height:1.12;margin:12px 0}
 .description{font-size:1rem;line-height:1.65;color:var(--muted);margin:0 0 28px}
 form{display:grid;gap:12px}
 label{font-weight:600}
-input{width:100%;padding:16px;border:1px solid #b9c8db;border-radius:10px;font:inherit}
+input,select{width:100%;padding:16px;border:1px solid #b9c8db;border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
 input:focus{outline:3px solid rgba(67,184,223,.28);border-color:var(--blue)}
 button{border:0;border-radius:10px;background:var(--button);color:#fff;padding:17px 20px;font:700 1rem Inter,system-ui,sans-serif;cursor:pointer}
 button:hover{background:#159c4a}
