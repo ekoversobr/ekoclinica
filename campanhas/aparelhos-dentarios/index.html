@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Converse com a equipe da Eko Clínica para conhecer as possibilidades de avaliação ortodôntica e os tipos de aparelhos disponíveis.">
+  <meta name="theme-color" content="#174a9a">
+  <title>Aparelhos Dentários | Eko Clínica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/landing.css">
+  <!-- GTM será instalado após confirmar o container correto da Eko Clínica. -->
+</head>
+<body data-service="aparelhos-dentarios">
+  <main class="landing">
+    <section class="card" aria-labelledby="headline">
+      <a class="brand" href="../../" aria-label="Eko Clínica">
+        <img src="../assets/logo-eko-clinica.png" alt="Eko Clínica">
+      </a>
+      <p class="eyebrow">Eko Clínica · Centro de Saúde</p>
+      <h1 id="headline">Cuide do alinhamento do seu sorriso</h1>
+      <p class="description">Converse com a equipe da Eko Clínica para conhecer as possibilidades de avaliação ortodôntica e os tipos de aparelhos disponíveis.</p>
+      <form id="contact-form">
+        <label for="name">Seu nome</label>
+        <input id="name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="Como podemos chamar você?" required>
+        <button type="submit">Continuar pelo WhatsApp <span aria-hidden="true">→</span></button>
+        <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      </form>
+      <p class="privacy">Ao continuar, o WhatsApp será aberto para você revisar e enviar a mensagem. Não informe dados clínicos ou detalhes de saúde neste formulário.</p>
+    </section>
+  </main>
+  <script src="../assets/landing.js" defer></script>
+</body>
+</html>
