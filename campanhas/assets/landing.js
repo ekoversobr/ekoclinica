@@ -34,6 +34,24 @@
     var whatsappUrl = "https://wa.me/" + whatsappNumber +
       "?text=" + encodeURIComponent(message);
 
-    window.location.assign(whatsappUrl);
+    // Registra apenas a intenção de abrir o WhatsApp.
+    // Não envia nome, assunto ou qualquer dado clínico ao Google.
+    window.dataLayer = window.dataLayer || [];
+
+    var redirectStarted = false;
+    function continueToWhatsApp() {
+      if (redirectStarted) return;
+      redirectStarted = true;
+      window.location.assign(whatsappUrl);
+    }
+
+    window.dataLayer.push({
+      event: "click_whatsapp",
+      eventCallback: continueToWhatsApp,
+      eventTimeout: 1000
+    });
+
+    // Fallback para o caso de o GTM não responder ao callback.
+    window.setTimeout(continueToWhatsApp, 1200);
   });
 })();
