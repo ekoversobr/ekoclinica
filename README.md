@@ -1,43 +1,35 @@
-# Eko Clínica — site independente (versão inicial)
+# Eko Clínica — site independente
 
-Este é um site estático em HTML, CSS e JavaScript. O objetivo é dar à equipe um ponto de partida que possa ser editado sem WordPress, Elementor ou plugins.
+Site institucional e páginas de campanha em HTML, CSS e JavaScript, sem WordPress, Elementor ou dependências de CMS.
 
-## Arquivos
-- `index.html` — conteúdo e estrutura
-- `styles.css` — aparência e responsividade
-- `script.js` — menu móvel e formulário que prepara mensagem para WhatsApp
-
-## Importante antes de publicar
-1. Confirme que o número `5583996809052` é o WhatsApp correto da Eko Clínica.
-2. Revise os textos, atendimentos disponíveis, endereço, horários, responsáveis técnicos e política de privacidade.
-3. O formulário **não salva dados num banco**: ele abre o WhatsApp com uma mensagem pré-preenchida. A pessoa ainda precisa revisar e enviar.
-4. O botão flutuante abre diretamente o WhatsApp.
-5. Este pacote não inclui rastreamento do Google Ads/Google Tag Manager. A mensuração deve ser adicionada e testada depois, quando o domínio e a estratégia de publicação estiverem definidos.
-6. Não publique informações clínicas sensíveis no formulário.
-7. A publicação em `ekoclinica.com.br` exige acesso ao DNS/domínio e à plataforma de hospedagem, ou ajuda de quem controla esses acessos. Este pacote não altera o site atual.
-
-## Como testar localmente
-Abra `index.html` num navegador moderno. Para testar o formulário, use um dispositivo com WhatsApp Web/app disponível.
-
-## Liberdade e portabilidade
-O site usa arquivos abertos e pode ser hospedado em qualquer serviço que aceite arquivos estáticos. O conteúdo não depende de WordPress ou Elementor. A fonte tipográfica Inter é carregada do Google Fonts; se quiser evitar essa dependência externa, remova a linha `@import` de `styles.css` e o site usará fontes locais do sistema.
-
+## Site institucional
+- `index.html` — página principal.
+- `styles.css` — estilos.
+- `script.js` — interações e formulário WhatsApp.
 
 ## Landing pages de campanhas
+A pasta `campanhas/` contém a landing principal e páginas específicas por serviço. Os arquivos compartilhados estão em `campanhas/assets/`.
 
-As cinco páginas de serviços ficam na pasta `campanhas/`. Cada página utiliza os arquivos compartilhados em `campanhas/assets/`.
+- `campanhas/index.html` — formulário único com nome e assunto.
+- `campanhas/sedacao-consciente/`
+- `campanhas/implantes-dentarios/`
+- `campanhas/aparelhos-dentarios/`
+- `campanhas/facetas-em-resina/`
+- `campanhas/limpeza-e-clareamento/`
 
-- Sedação Consciente: `campanhas/sedacao-consciente/`
-- Implantes Dentários: `campanhas/implantes-dentarios/`
-- Aparelhos Dentários: `campanhas/aparelhos-dentarios/`
-- Facetas em Resina: `campanhas/facetas-em-resina/`
-- Limpeza e Clareamento: `campanhas/limpeza-e-clareamento/`
+A landing principal de campanhas está deliberadamente sem Google tag, Google Tag Manager, GA4, pixels e eventos `dataLayer`. A mensuração será implantada separadamente após a confirmação da arquitetura correta e dos testes de disparo e deduplicação.
 
-O formulário solicita somente o nome e abre o WhatsApp com mensagem pré-preenchida. O evento `form_start` mede a primeira interação e `whatsapp_handoff` mede a tentativa validada de encaminhamento. Nenhum desses eventos confirma mensagem enviada, conversa, agendamento ou venda.
+## WhatsApp e dados
+O formulário abre o WhatsApp com uma mensagem pré-preenchida. A pessoa precisa revisar e enviar a mensagem. O site não salva os dados em banco nem os envia a plataformas de analytics. O clique/encaminhamento não comprova conversa, agendamento, comparecimento ou venda.
 
-Antes de ativar anúncios:
-1. Confirmar o número do WhatsApp da clínica.
-2. Confirmar qual container GTM deve ser usado: há um identificador no site atual, mas a medição precisa ser testada no Tag Assistant.
-3. Instalar GTM apenas após essa confirmação e configurar GA4/Google Ads no container correto.
-4. Testar cada landing em celular e desktop.
-5. Confirmar com a clínica textos, serviços e regras de publicidade profissional.
+Não solicitar ou incluir diagnóstico, exames ou informações clínicas sensíveis em formulários, URLs ou ferramentas de publicidade.
+
+## Antes de anunciar
+1. Confirmar com a clínica o número configurado no JavaScript.
+2. Revisar textos, serviços, dados institucionais e política de privacidade.
+3. Testar em celular e desktop.
+4. Implantar mensuração em etapa separada, verificando cada evento e evitando tags duplicadas.
+5. Validar textos e regras de publicidade profissional aplicáveis.
+
+## Teste local
+Abra `index.html` em um navegador moderno ou sirva os arquivos por um servidor estático local.
