@@ -34,24 +34,43 @@
     var whatsappUrl = "https://wa.me/" + whatsappNumber +
       "?text=" + encodeURIComponent(message);
 
-    // Registra apenas a intenção de abrir o WhatsApp.
-    // Não envia nome, assunto ou qualquer dado clínico ao Google.
+    // Abre uma aba em branco durante o clique do usuário para evitar
+    // bloqueio de pop-up. A aba atual permanece aberta para o Tag Assistant.
+    var whatsappWindow = window.open("about:blank", "_blank");
+
     window.dataLayer = window.dataLayer || [];
 
-    var redirectStarted = false;
+    var completed = false;
     function continueToWhatsApp() {
-      if (redirectStarted) return;
-      redirectStarted = true;
-      window.location.assign(whatsappUrl);
+      if (completed) return;
+      completed = true;
+
+      if (whatsappWindow && !whatsappWindow.closed) {
+        whatsappWindow.location.href = whatsappUrl;
+        feedback.textContent = "O WhatsApp foi aberto em uma nova aba.";
+        return;
+      }
+
+      // Se o navegador bloquear a nova aba, mantém a landing aberta
+      // e oferece um link manual, sem interromper a depuração.
+      feedback.textContent = "O navegador bloqueou a nova aba. ";
+      var link = document.createElement("a");
+      link.href = whatsappUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = "Clique aqui para abrir o WhatsApp.";
+      feedback.appendChild(link);
     }
 
+    // Mede somente a intenção de abrir o WhatsApp; não envia nome,
+    // assunto ou dados clínicos ao Google.
     window.dataLayer.push({
       event: "click_whatsapp",
       eventCallback: continueToWhatsApp,
-      eventTimeout: 1000
+      eventTimeout: 1500
     });
 
-    // Fallback para o caso de o GTM não responder ao callback.
-    window.setTimeout(continueToWhatsApp, 1200);
+    // Fallback caso o GTM não execute o callback.
+    window.setTimeout(continueToWhatsApp, 1700);
   });
 })();
