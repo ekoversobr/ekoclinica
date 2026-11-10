@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fc">
+  <meta name="description" content="Solicite informações e atendimento à equipe da Eko Clínica pelo WhatsApp.">
+  <title>Fale com a Eko Clínica</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="lead-card" aria-labelledby="page-title">
+      <header class="brand-area">
+        <a class="brand" href="../../" aria-label="Eko Clínica — página inicial">
+          <img src="../../logo-eko-clinica.png" alt="Eko Clínica">
+        </a>
+        <span class="secure-note"><span aria-hidden="true">●</span> Atendimento direto pelo WhatsApp</span>
+      </header>
+
+      <div class="intro">
+        <p class="eyebrow">EKО CLÍNICA · CENTRO DE SAÚDE</p>
+        <h1 id="page-title">Vamos começar uma conversa?</h1>
+        <p class="intro-copy">Preencha seus dados e escolha o atendimento. Nossa equipe dará continuidade pelo WhatsApp.</p>
+      </div>
+
+      <form id="lead-form" novalidate>
+        <div class="field">
+          <label for="name">Como podemos chamar você?</label>
+          <input id="name" name="name" type="text" autocomplete="name" maxlength="90" placeholder="Seu nome completo ou social" required>
+          <small class="field-error" id="name-error"></small>
+        </div>
+
+        <div class="field">
+          <label for="phone">Seu telefone com DDD</label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="(83) 99999-9999" required>
+          <small class="field-error" id="phone-error"></small>
+        </div>
+
+        <div class="field">
+          <label for="service">Qual atendimento deseja consultar?</label>
+          <select id="service" name="service" required>
+            <option value="">Selecione uma opção</option>
+            <option value="Sedação consciente">Sedação consciente</option>
+            <option value="Implantes dentários">Implantes dentários</option>
+            <option value="Aparelhos dentários">Aparelhos dentários</option>
+            <option value="Facetas em resina">Facetas em resina</option>
+            <option value="Limpeza e clareamento dental">Limpeza e clareamento dental</option>
+            <option value="Tratamento de canal">Tratamento de canal</option>
+            <option value="Odontopediatria">Odontopediatria</option>
+            <option value="Outro assunto / informações gerais">Outro assunto / informações gerais</option>
+          </select>
+          <small class="field-error" id="service-error"></small>
+        </div>
+
+        <section class="message-preview" aria-labelledby="preview-title">
+          <div class="preview-heading">
+            <span class="preview-icon" aria-hidden="true">✉</span>
+            <div>
+              <h2 id="preview-title">Prévia da mensagem</h2>
+              <p>Você poderá revisar antes de enviar.</p>
+            </div>
+          </div>
+          <p id="message-preview" class="preview-text">Olá! Gostaria de falar com a equipe da Eko Clínica.</p>
+        </section>
+
+        <button class="submit-button" id="submit-button" type="submit">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.02 3.2a12.3 12.3 0 0 0-10.5 18.7L3.8 28.8l7.1-1.9a12.3 12.3 0 1 0 5.1-23.7Zm0 22.3c-1.8 0-3.5-.5-5-1.4l-.4-.2-4.2 1.1 1.1-4.1-.3-.4a10 10 0 1 1 8.8 5Zm5.5-7.5c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.2 8.2 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.4.3-.6s0-.4 0-.6l-1-2.3c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.2-1.2 2.8 1.2 3.2 1.4 3.4c.2.2 2.4 3.7 5.8 5.1.8.4 1.4.5 1.9.7.8.2 1.5.2 2 .1.6-.1 1.8-.8 2.1-1.5s.3-1.4.2-1.5-.3-.2-.6-.4Z"/></svg>
+          Continuar pelo WhatsApp
+          <span aria-hidden="true">→</span>
+        </button>
+        <p id="form-feedback" class="form-feedback" role="status" aria-live="polite"></p>
+      </form>
+
+      <footer class="card-footer">
+        <p>Ao continuar, o WhatsApp será aberto com a mensagem preenchida. Você decide se deseja enviá-la.</p>
+        <p>Não inclua diagnósticos, exames ou informações clínicas sensíveis neste formulário.</p>
+      </footer>
+    </section>
+    <p class="page-footer">Eko Clínica · Cuidado próximo, humano e responsável.</p>
+  </main>
+  <script src="script.js" defer></script>
+</body>
+</html>
