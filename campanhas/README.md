@@ -1,30 +1,30 @@
 # Landing pages de campanhas — Eko Clínica
 
-Páginas dos cinco serviços prioritários. Cada pasta contém apenas o seu `index.html`; os arquivos compartilhados estão em `assets/`.
+Landing principal de captação:
+- `index.html` — formulário com nome e assunto, encaminhando para o WhatsApp.
 
+Páginas específicas por serviço:
 - `sedacao-consciente/`
 - `implantes-dentarios/`
 - `aparelhos-dentarios/`
 - `facetas-em-resina/`
 - `limpeza-e-clareamento/`
 
-## Configuração compartilhada
-- `assets/landing.css`: apresentação responsiva.
-- `assets/landing.js`: validação simples, encaminhamento ao WhatsApp e eventos de intenção.
+## Arquivos compartilhados
+- `assets/landing.css` — apresentação responsiva.
+- `assets/landing.js` — validação do formulário e abertura do WhatsApp.
+- A logo utilizada na landing principal vem de `../logo-eko-clinica.png`.
 
-O número de WhatsApp está definido no JavaScript e deve ser confirmado antes da publicação. O GTM não foi incluído nas páginas porque há divergência entre IDs antigos; confirmar o container da Eko Clínica antes de adicionar tracking.
+## Mensuração
+Esta landing foi deliberadamente mantida sem Google tag, Google Tag Manager, GA4, pixels ou eventos `dataLayer`. A mensuração deverá ser instalada separadamente, depois da definição da arquitetura correta para a Eko Clínica e de um plano de testes que evite tags duplicadas.
 
-## Eventos
-- `form_start`: primeira interação no campo de nome.
-- `whatsapp_handoff`: formulário validado, imediatamente antes do encaminhamento ao WhatsApp.
+O formulário abre o WhatsApp com uma mensagem pré-preenchida. Isso mede apenas a intenção de iniciar uma conversa; não confirma que a mensagem foi enviada, que houve resposta, agendamento, comparecimento ou venda.
 
-Esses eventos não comprovam envio da mensagem, conversa, lead qualificado, agendamento ou venda. Não enviar nome, telefone ou dados clínicos para o dataLayer, GA4 ou Google Ads.
+## Privacidade
+O nome e o assunto são usados somente para compor a mensagem no WhatsApp. O site não grava esses campos em banco de dados nem os envia para ferramentas de analytics. Não informe diagnóstico, exames ou outros dados clínicos neste formulário.
 
-
-## Formulário único com assunto
-
-A página `campanhas/` apresenta dois campos: nome e assunto. As opções são Agendamento, Sedação, Implantes, Aparelhos, Limpeza, Clareamento, Pediatria e Outras informações.
-
-A mensagem pré-preenchida no WhatsApp segue o formato: “Olá! Vim do anúncio do Google. Me chamo [nome] e estou em busca de informações sobre [assunto].”
-
-O número configurado é o mesmo que consta no site institucional: 5583996809052. Confirmar com a clínica antes de anunciar. O formulário envia somente o identificador técnico do assunto ao dataLayer; nome e assunto em texto não são enviados ao GA4/Google Ads.
+## Antes de anunciar
+1. Confirmar com a clínica o número de WhatsApp configurado em `assets/landing.js`.
+2. Testar o formulário em celular e desktop.
+3. Confirmar serviços, textos e regras de publicidade profissional.
+4. Instalar e validar a mensuração em uma etapa separada, sem duplicar tags.
