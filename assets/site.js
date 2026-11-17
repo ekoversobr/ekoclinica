@@ -60,6 +60,41 @@
     } catch (e) { /* segue sem registrar */ }
   }
 
+  function avisarGTM(servico) {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "whatsapp_click",
+      servico: servico || "",
+      origem_anuncio: dados.gclid ? "google_ads" : "outra"
+    });
+  }
+
+  // Páginas de serviço: formulário curto que abre o WhatsApp com a mensagem pronta.
+  // O envio passa por um link wa.me real (#wa-envio) para o acionador de clique
+  // em links do GTM continuar contando a conversão "Contato".
+  var form = document.getElementById("form-agendar");
+  var envio = document.getElementById("wa-envio");
+  if (form && envio) {
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var nome = form.nome.value.trim().replace(/\s+/g, " ");
+      var proc = form.procedimento.value;
+      var aviso = document.getElementById("form-aviso");
+      if (nome.length < 2) {
+        aviso.textContent = "Informe seu nome para continuar.";
+        form.nome.focus();
+        return;
+      }
+      var pedido = proc === "uma avaliação" ? "agendar uma avaliação" : "agendar uma avaliação de " + proc;
+      var msg = "Olá, tudo bem? Me chamo " + nome + ". Cliquei no anúncio da Eko Clínica no Google e gostaria de " +
+        pedido + ". (cód. " + dados.codigo + ")";
+      envio.href = "https://wa.me/" + envio.href.split("wa.me/")[1].split("?")[0] + "?text=" + encodeURIComponent(msg);
+      avisarGTM(proc);
+      aviso.textContent = "Abrindo o WhatsApp…";
+      envio.click();
+    });
+  }
+
   var links = document.querySelectorAll("a[data-wa]");
   for (var i = 0; i < links.length; i++) {
     var a = links[i];
@@ -72,12 +107,7 @@
     } catch (e) { /* mantém o link original */ }
 
     a.addEventListener("click", function (ev) {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "whatsapp_click",
-        servico: ev.currentTarget.getAttribute("data-servico") || "",
-        origem_anuncio: dados.gclid ? "google_ads" : "outra"
-      });
+      avisarGTM(ev.currentTarget.getAttribute("data-servico"));
     });
   }
 })();

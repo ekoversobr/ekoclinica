@@ -8,14 +8,13 @@ import html
 import json
 import os
 import sys
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(RAIZ, "_fonte"))
-from conteudo import CLINICA as C, TRATAMENTOS, REDIRECIONAMENTOS  # noqa: E402
+from conteudo import CLINICA as C, TRATAMENTOS, REDIRECIONAMENTOS, MSG_HOME  # noqa: E402
 
 E = html.escape
-POR_SLUG = {t["slug"]: t for t in TRATAMENTOS}
 ENDERECO = f'{C["rua"]}, {C["bairro"]}, {C["cidade"]} - {C["uf"]}, CEP {C["cep"]}'
 MAPA = "https://www.google.com/maps/search/?api=1&query=" + quote(
     f'{C["rua"]}, {C["bairro"]}, {C["cidade"]} - {C["uf"]}, {C["cep"]}')
@@ -30,24 +29,27 @@ ICONE_RELOGIO = ('<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height=
                  'd="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 10.4 3.2 1.9-.8 1.3L11 13V7h2z"/></svg>')
 
 
-def msg_whatsapp(servico):
-    if servico:
-        return f"Olá! Vim pelo site da Eko Clínica e gostaria de informações sobre {servico}."
-    return "Olá! Vim pelo site da Eko Clínica e gostaria de agendar uma avaliação."
+def link_wa(mensagem):
+    return f'https://wa.me/{C["whatsapp"]}?text=' + quote(mensagem)
 
 
-def botao_wa(texto, servico, classe="btn btn-wa"):
-    href = f'https://wa.me/{C["whatsapp"]}?text=' + quote(msg_whatsapp(servico))
-    return (f'<a class="{classe}" href="{href}" target="_blank" rel="noopener" data-wa '
-            f'data-servico="{E(servico or "avaliação")}">{ICONE_CHAT}<span>{E(texto)}</span></a>')
+def botao_wa(texto, classe="btn btn-wa"):
+    return (f'<a class="{classe}" href="{link_wa(MSG_HOME)}" target="_blank" rel="noopener" data-wa '
+            f'data-servico="pagina principal">{ICONE_CHAT}<span>{E(texto)}</span></a>')
 
 
-def cabeca(titulo, descricao, caminho, prefixo, jsonld=None, noindex=False):
+def botao_flutuante():
+    return (f'<a class="wa-flutuante" href="{link_wa(MSG_HOME)}" target="_blank" rel="noopener" data-wa '
+            f'data-servico="pagina principal" aria-label="Falar com a Eko Clínica pelo WhatsApp">'
+            f'{ICONE_CHAT.replace("width=\"20\" height=\"20\"", "width=\"30\" height=\"30\"")}</a>')
+
+
+def cabeca(titulo, descricao, caminho, prefixo, jsonld=None, classe_body=""):
     canonical = C["url_base"] + caminho
     ld = ""
     if jsonld:
         ld = '<script type="application/ld+json">' + json.dumps(jsonld, ensure_ascii=False) + "</script>\n"
-    robots = '<meta name="robots" content="noindex">\n' if noindex else ""
+    body = f' class="{classe_body}"' if classe_body else ""
     return f"""<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -62,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{E(titulo)}</title>
 <meta name="description" content="{E(descricao)}">
-{robots}<link rel="canonical" href="{canonical}">
+<link rel="canonical" href="{canonical}">
 <meta name="theme-color" content="#0149ad">
 <meta property="og:type" content="website">
 <meta property="og:title" content="{E(titulo)}">
@@ -75,14 +77,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="stylesheet" href="{prefixo}assets/site.css">
 {ld}<script src="{prefixo}assets/site.js" defer></script>
 </head>
-<body>
+<body{body}>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={C["gtm"]}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 """
 
 
-def topo(prefixo, servico):
+def topo(prefixo):
     return f"""<header class="topo">
   <div class="topo-in">
     <a class="marca" href="{prefixo or './'}" aria-label="Eko Clínica, página inicial">
@@ -93,33 +95,12 @@ def topo(prefixo, servico):
       <a href="{prefixo}#tratamentos">Tratamentos</a>
       <a href="{prefixo}#onde-estamos">Onde estamos</a>
     </nav>
-    {botao_wa("WhatsApp", servico, "btn btn-wa btn-sm")}
   </div>
 </header>
 """
 
 
-def bloco_local(servico):
-    return f"""<section class="secao local" id="onde-estamos" aria-labelledby="onde-titulo">
-  <div class="in grade-2">
-    <div>
-      <h2 id="onde-titulo">Onde estamos</h2>
-      <p class="info">{ICONE_PIN}<span>{E(C["rua"])}<br>{E(C["bairro"])}, {E(C["cidade"])} - {E(C["uf"])}<br>CEP {E(C["cep"])}</span></p>
-      <p class="info">{ICONE_RELOGIO}<span>Segunda a sexta, 8h às 18h<br>Sábado, 9h às 12h<br>Atendimento com horário agendado</span></p>
-      <p class="acoes">{botao_wa("Agendar pelo WhatsApp", servico)}
-        <a class="btn btn-claro" href="{MAPA}" target="_blank" rel="noopener">Ver no mapa</a></p>
-    </div>
-    <div class="cartao-rt">
-      <p class="rotulo">Responsável técnica</p>
-      <p class="rt-nome">{E(C["rt_nome"])}</p>
-      <p>{E(C["rt_cargo"])} · {E(C["rt_cro"])}</p>
-    </div>
-  </div>
-</section>
-"""
-
-
-def rodape(prefixo, servico):
+def rodape(prefixo):
     return f"""<footer class="rodape">
   <div class="in">
     <p><strong>Eko Clínica</strong> · {E(ENDERECO)}</p>
@@ -128,7 +109,7 @@ def rodape(prefixo, servico):
     <p><a href="{prefixo}privacidade/">Política de privacidade</a></p>
   </div>
 </footer>
-<div class="barra-fixa">{botao_wa("Agendar avaliação pelo WhatsApp", servico, "btn btn-wa btn-largo")}</div>
+{botao_flutuante()}
 </body>
 </html>
 """
@@ -171,16 +152,16 @@ def pagina_inicial():
     cards = "\n".join(
         f"""      <a class="card-trat" href="{t['slug']}/">
         <h3>{E(t['nome'])}</h3>
-        <p>{E(t['card'])}</p>
-        <span class="mais">Saiba mais →</span>
+        <p>{E(t['sub'])}</p>
+        <span class="mais">Agendar avaliação →</span>
       </a>""" for t in TRATAMENTOS)
-    corpo = f"""{topo("", None)}<main>
+    corpo = f"""{topo("")}<main>
 <section class="hero">
   <div class="in">
     <p class="selo">Mangabeira · João Pessoa</p>
     <h1>Dentista em Mangabeira, João Pessoa</h1>
     <p class="lead">Sedação consciente, implantes, tratamento de canal, extração de siso e facetas em resina. Fale com a equipe pelo WhatsApp e agende sua avaliação.</p>
-    <p class="acoes">{botao_wa("Agendar avaliação pelo WhatsApp", None)}</p>
+    <p class="acoes">{botao_wa("Agendar avaliação pelo WhatsApp")}</p>
     <ul class="fatos">
       <li>{ICONE_PIN}<span>{E(C["rua"])}, {E(C["bairro"])}</span></li>
       <li>{ICONE_RELOGIO}<span>{E(C["horario_curto"])}</span></li>
@@ -201,7 +182,7 @@ def pagina_inicial():
       <h2 id="medo-titulo">Tem medo de dentista?</h2>
       <p>Com a sedação consciente, você fica relaxado e acordado durante o tratamento. Ela pode ser usada em procedimentos como extração de siso, canal e implantes, conforme avaliação.</p>
     </div>
-    <p class="acoes"><a class="btn btn-claro" href="sedacao-consciente/">Conhecer a sedação consciente</a></p>
+    <p class="acoes"><a class="btn btn-claro" href="sedacao-consciente/">Agendar com sedação consciente</a></p>
   </div>
 </section>
 <section class="secao" aria-labelledby="como-titulo">
@@ -214,101 +195,86 @@ def pagina_inicial():
     </ol>
   </div>
 </section>
-{bloco_local(None)}</main>
+<section class="secao local" id="onde-estamos" aria-labelledby="onde-titulo">
+  <div class="in grade-2">
+    <div>
+      <h2 id="onde-titulo">Onde estamos</h2>
+      <p class="info">{ICONE_PIN}<span>{E(C["rua"])}<br>{E(C["bairro"])}, {E(C["cidade"])} - {E(C["uf"])}<br>CEP {E(C["cep"])}</span></p>
+      <p class="info">{ICONE_RELOGIO}<span>Segunda a sexta, 8h às 18h<br>Sábado, 9h às 12h<br>Atendimento com horário agendado</span></p>
+      <p class="acoes">{botao_wa("Agendar pelo WhatsApp")}
+        <a class="btn btn-claro" href="{MAPA}" target="_blank" rel="noopener">Ver no mapa</a></p>
+    </div>
+    <div class="cartao-rt">
+      <p class="rotulo">Responsável técnica</p>
+      <p class="rt-nome">{E(C["rt_nome"])}</p>
+      <p>{E(C["rt_cargo"])} · {E(C["rt_cro"])}</p>
+    </div>
+  </div>
+</section>
+</main>
 """
     pagina = cabeca(
         "Dentista em Mangabeira, João Pessoa | Eko Clínica",
         "Dentista em Mangabeira, João Pessoa: sedação consciente, implantes, tratamento de canal, extração de siso e facetas em resina. Agende sua avaliação pelo WhatsApp.",
-        "", "", jsonld_clinica()) + corpo + rodape("", None)
+        "", "", jsonld_clinica()) + corpo + rodape("")
     escrever("index.html", pagina)
 
 
-def pagina_tratamento(t):
+def pagina_servico(t):
+    """Página enxuta de serviço: um cartão com nome, procedimento e botão para o WhatsApp."""
     p = "../"
-    itens = "\n".join(f"      <li>{E(i)}</li>" for i in t["para_quem"])
-    nota = f'\n    <p class="nota">{E(t["para_quem_nota"])}</p>' if t.get("para_quem_nota") else ""
-    etapas = "\n".join(f"      <li><strong>{E(a)}</strong><span>{E(b)}</span></li>" for a, b in t["etapas"])
-    faq = "\n".join(f"""    <details>
-      <summary>{E(q)}</summary>
-      <p>{E(r)}</p>
-    </details>""" for q, r in t["faq"])
-    rel = "\n".join(
-        f"""      <a class="card-trat" href="{p}{s}/"><h3>{E(POR_SLUG[s]['nome'])}</h3><p>{E(POR_SLUG[s]['card'])}</p><span class="mais">Saiba mais →</span></a>"""
-        for s in t["relacionados"])
-    ld_faq = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [{"@type": "Question", "name": q,
-                        "acceptedAnswer": {"@type": "Answer", "text": r}} for q, r in t["faq"]],
-    }
-    corpo = f"""{topo(p, t["servico_msg"])}<main>
-<section class="hero hero-trat">
-  <div class="in">
-    <p class="selo"><a href="{p}">Eko Clínica</a> · {E(t["nome"])}</p>
-    <h1>{E(t["h1"])}</h1>
-    <p class="lead">{E(t["intro"])}</p>
-    <p class="acoes">{botao_wa("Agendar avaliação pelo WhatsApp", t["servico_msg"])}</p>
-    <ul class="fatos">
-      <li>{ICONE_PIN}<span>{E(C["rua"])}, {E(C["bairro"])}</span></li>
-      <li>{ICONE_RELOGIO}<span>{E(C["horario_curto"])}</span></li>
-    </ul>
-  </div>
-</section>
-<section class="secao" aria-labelledby="pq-titulo">
-  <div class="in">
-    <h2 id="pq-titulo">{E(t["para_quem_titulo"])}</h2>
-    <ul class="lista">
-{itens}
-    </ul>{nota}
-  </div>
-</section>
-<section class="secao destaque" aria-labelledby="etapas-titulo">
-  <div class="in">
-    <h2 id="etapas-titulo">Como funciona</h2>
-    <ol class="etapas">
-{etapas}
-    </ol>
-  </div>
-</section>
-<section class="secao" aria-labelledby="faq-titulo">
-  <div class="in estreito">
-    <h2 id="faq-titulo">Perguntas frequentes</h2>
-{faq}
-    <p class="acoes">{botao_wa("Tirar dúvidas pelo WhatsApp", t["servico_msg"])}</p>
-  </div>
-</section>
-<section class="secao" aria-labelledby="rel-titulo">
-  <div class="in">
-    <h2 id="rel-titulo">Veja também</h2>
-    <div class="grade-cards grade-2c">
-{rel}
-    </div>
-  </div>
-</section>
-{bloco_local(t["servico_msg"])}</main>
+    opcoes = "\n".join(
+        f'          <option value="{E(x["servico_msg"])}"{" selected" if x["slug"] == t["slug"] else ""}>{E(x["nome"])}</option>'
+        for x in TRATAMENTOS)
+    corpo = f"""<main class="lp">
+  <section class="lp-card" aria-labelledby="lp-titulo">
+    <a class="lp-logo" href="{p}" aria-label="Eko Clínica, página inicial">
+      <img src="{p}assets/logo-eko-clinica.png" alt="Eko Clínica, Centro de Saúde" width="88" height="88">
+    </a>
+    <h1 id="lp-titulo">{E(t["h1"])}</h1>
+    <p class="lp-sub">{E(t["sub"])}</p>
+    <form id="form-agendar" novalidate>
+      <label for="nome">Seu nome</label>
+      <input id="nome" name="nome" type="text" autocomplete="given-name" maxlength="60" placeholder="Como podemos chamar você?" required>
+      <label for="procedimento">Procedimento</label>
+      <select id="procedimento" name="procedimento">
+{opcoes}
+          <option value="uma avaliação">Outro / avaliação geral</option>
+      </select>
+      <button type="submit" class="btn btn-wa btn-largo">{ICONE_CHAT}<span>Agendar pelo WhatsApp</span></button>
+      <p id="form-aviso" class="lp-aviso" role="status" aria-live="polite"></p>
+    </form>
+    <a id="wa-envio" class="oculto" href="https://wa.me/{C["whatsapp"]}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">WhatsApp</a>
+    <p class="lp-nota">O WhatsApp abre com a sua mensagem pronta para enviar.<br>{E(C["horario_curto"])}</p>
+    <p class="lp-rodape">{E(C["rua"])}, {E(C["bairro"])}, {E(C["cidade"])} - {E(C["uf"])}<br>
+      Responsável técnica: {E(C["rt_nome"])}, {E(C["rt_cro"])} · <a href="{p}privacidade/">Privacidade</a></p>
+  </section>
+</main>
+</body>
+</html>
 """
-    pagina = cabeca(t["title"], t["description"], t["slug"] + "/", p, [jsonld_clinica(), ld_faq]) \
-        + corpo + rodape(p, t["servico_msg"])
+    pagina = cabeca(f'{t["h1"]}, João Pessoa | Eko Clínica', t["description"], t["slug"] + "/", p,
+                    jsonld_clinica(), "pagina-lp") + corpo
     escrever(f'{t["slug"]}/index.html', pagina)
 
 
 def pagina_privacidade():
     p = "../"
-    corpo = f"""{topo(p, None)}<main>
+    corpo = f"""{topo(p)}<main>
 <section class="secao">
   <div class="in estreito texto">
     <h1>Política de privacidade</h1>
     <p>Última atualização: 17 de novembro de 2026.</p>
     <p>Esta política explica como o site da Eko Clínica ({E(ENDERECO)}) trata informações de quem o visita, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).</p>
     <h2>O que coletamos neste site</h2>
-    <p>O site não tem formulários e não pede nome, telefone, e-mail ou informações de saúde. O contato acontece pelo WhatsApp, quando você decide enviar a mensagem.</p>
-    <p>Quando você chega ao site por um anúncio do Google, o endereço da página traz um identificador do clique, criado pelo Google. O site gera um código de atendimento (por exemplo, EK7F3K), guarda esse código no seu navegador e o inclui na mensagem do WhatsApp. O código e o identificador do clique são registrados em uma planilha de acesso restrito da clínica e da agência que gerencia os anúncios, sem nenhum dado pessoal.</p>
+    <p>Nas páginas de agendamento, o nome e o procedimento que você informa servem apenas para montar a mensagem do WhatsApp. Eles não são gravados pelo site. O contato acontece pelo WhatsApp, quando você decide enviar a mensagem. Não informe dados de saúde no site.</p>
+    <p>Quando você chega ao site por um anúncio do Google, o endereço da página traz um identificador do clique, criado pelo Google. O site gera um código de atendimento (por exemplo, EK7F3K), guarda esse código no seu navegador e o inclui na mensagem do WhatsApp. O código e o identificador do clique são registrados em uma planilha de acesso restrito da clínica e da agência que gerencia os anúncios, sem nome, telefone ou outros dados pessoais.</p>
     <h2>Para que usamos</h2>
-    <p>Para saber quais anúncios trazem pacientes e informar ao Google Ads, de forma agregada, quais cliques resultaram em agendamento ou tratamento. Isso permite investir melhor e mostrar menos anúncios irrelevantes.</p>
+    <p>Para saber quais anúncios trazem pacientes e informar ao Google Ads quais cliques resultaram em agendamento ou tratamento. Isso permite investir melhor e mostrar menos anúncios irrelevantes.</p>
     <h2>Cookies e ferramentas de terceiros</h2>
     <p>O site usa o Google Tag Manager e as ferramentas de medição do Google Ads, que podem gravar cookies no seu navegador. Você pode apagar ou bloquear cookies nas configurações do navegador.</p>
     <h2>Mensagens pelo WhatsApp</h2>
-    <p>As conversas pelo WhatsApp são usadas apenas para atendimento e agendamento. Não envie exames ou detalhes de saúde pelo site. Informações clínicas são tratadas na consulta, com sigilo profissional.</p>
+    <p>As conversas pelo WhatsApp são usadas para atendimento e agendamento. Informações clínicas são tratadas na consulta, com sigilo profissional.</p>
     <h2>Seus direitos</h2>
     <p>Você pode pedir acesso, correção ou exclusão dos seus dados pelo WhatsApp {E(C["telefone_exibicao"])}.</p>
     <h2>Responsável</h2>
@@ -319,7 +285,7 @@ def pagina_privacidade():
 """
     pagina = cabeca("Política de privacidade | Eko Clínica",
                     "Como o site da Eko Clínica trata as informações de quem o visita.",
-                    "privacidade/", p) + corpo + rodape(p, None)
+                    "privacidade/", p) + corpo + rodape(p)
     escrever("privacidade/index.html", pagina)
 
 
@@ -339,7 +305,6 @@ def redirecionamentos():
 
 
 def pagina_404():
-    from urllib.parse import urlparse
     base = urlparse(C["url_base"]).path or "/"
     escrever("404.html", f"""<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -362,7 +327,7 @@ def sitemap():
 if __name__ == "__main__":
     pagina_inicial()
     for t in TRATAMENTOS:
-        pagina_tratamento(t)
+        pagina_servico(t)
     pagina_privacidade()
     redirecionamentos()
     pagina_404()
