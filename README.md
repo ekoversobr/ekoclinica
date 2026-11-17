@@ -1,37 +1,35 @@
-# Eko Clínica — site independente
+# Eko Clínica: site
 
-Site institucional e páginas de campanha em HTML, CSS e JavaScript, sem WordPress, Elementor ou dependências de CMS.
+Site estático da Eko Clínica (odontologia em Mangabeira, João Pessoa), publicado pelo GitHub Pages em https://ekoversobr.github.io/ekoclinica/. Gerenciado pela Ekoverso.
 
-## Site institucional
-- `index.html` — página principal.
-- `styles.css` — estilos.
-- `script.js` — interações e formulário WhatsApp.
+## Páginas
+| Endereço | Uso |
+|---|---|
+| `/` | Página principal: dentista em Mangabeira |
+| `/sedacao-consciente/` | Sedação consciente |
+| `/implantes-dentarios/` | Implantes |
+| `/tratamento-de-canal/` | Tratamento de canal |
+| `/extracao-de-siso/` | Extração de siso |
+| `/facetas-em-resina/` | Facetas em resina |
+| `/privacidade/` | Política de privacidade (LGPD) |
+| `/campanhas/...` | Endereços antigos, redirecionam para as páginas novas |
 
-## Landing pages de campanhas
-- `campanhas/index.html` — landing simplificada anterior, mantida para referência.
-- `campanhas/nova/` — nova landing de captação criada do zero, com nome, telefone, seleção do atendimento e prévia automática da mensagem para WhatsApp.
-- `campanhas/sedacao-consciente/`
-- `campanhas/implantes-dentarios/`
-- `campanhas/aparelhos-dentarios/`
-- `campanhas/facetas-em-resina/`
-- `campanhas/limpeza-e-clareamento/`
+## Como editar
+Os textos ficam em `_fonte/conteudo.py`. Depois de editar, rode na raiz:
 
-## Nova landing
-A versão nova fica em `campanhas/nova/` para ser testada sem substituir a URL antiga. Ela possui arquivos independentes de HTML, CSS e JavaScript e não inclui Google tag, GTM, GA4, pixels ou eventos `dataLayer`.
+```
+python3 _fonte/gerar_site.py
+```
 
-## WhatsApp, mensuração e privacidade
-O formulário monta uma mensagem no navegador e abre o WhatsApp para o visitante revisar e enviar. Os campos não são armazenados em banco de dados nem enviados para analytics. O clique/encaminhamento não comprova mensagem enviada, conversa, agendamento, comparecimento ou venda.
+O script reescreve todos os HTML. Não edite os HTML gerados à mão: a próxima geração apaga a mudança. Estilos em `assets/site.css`, comportamento em `assets/site.js`.
 
-A mensuração será implantada em etapa separada, usando um container exclusivo da Eko Clínica, após testar a landing e definir os eventos e as regras de deduplicação. Não instalar tags de clientes no template mestre.
+Ao trocar de domínio, mude `url_base` em `_fonte/conteudo.py` e gere de novo.
 
-Não solicitar ou incluir diagnóstico, exames ou informações clínicas sensíveis em formulários, URLs ou ferramentas de publicidade.
+## Mensuração
+- Google Tag Manager `GTM-N7R9G9RZ` em todas as páginas. Nele, a conversão "Contato - Eko Clínica" dispara no clique em links `wa.me`. Ela mede intenção de contato, não conversa nem venda.
+- `assets/site.js` gera um código de atendimento (ex.: EK7F3K) para quem chega por anúncio do Google (`gclid`) e coloca esse código no fim da mensagem do WhatsApp. Envia também o evento `whatsapp_click` ao dataLayer.
+- Com `ENDPOINT` preenchido em `assets/site.js`, o par código + GCLID vai para a aba "Cliques do site" da planilha de leads (script em `_fonte/apps-script-planilha.gs`). A equipe anota o código do paciente na planilha, e agendamentos e vendas voltam ao Google Ads como conversões offline.
 
-## Antes de anunciar
-1. Confirmar com a clínica o número de WhatsApp configurado em `campanhas/nova/script.js`.
-2. Revisar os serviços e os textos.
-3. Testar o formulário em celular e desktop.
-4. Implantar e validar GTM/Google Ads em etapa separada.
-5. Validar textos e regras de publicidade profissional aplicáveis.
-
-## Teste local
-Abra o arquivo HTML por um servidor estático local ou publique pelo GitHub Pages.
+## Regras de conteúdo
+- Publicidade odontológica: manter nome e CRO da responsável técnica em todas as páginas. Não anunciar preços, descontos ou promessas de resultado.
+- Não pedir dados de saúde em formulários ou URLs, nem enviá-los a ferramentas de anúncio ou analytics.

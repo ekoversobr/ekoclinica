@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ekoversobr.github.io/ekoclinica/sitemap.xml
