@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  var ENDPOINT = ""; // URL do app da web do Apps Script (termina em /exec)
+  var ENDPOINT = "https://script.google.com/macros/s/AKfycbygHslpQ1rQhn10pftrihMVbH2iKofrFEj6J-VmvWWO7pD9pBPrCqcsYnEcOMJM1qzNEA/exec"; // App da Web do Apps Script da planilha
   var CHAVE = "eko_atendimento";
   var VALIDADE_MS = 90 * 24 * 60 * 60 * 1000;
 
