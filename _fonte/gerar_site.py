@@ -19,29 +19,31 @@ ENDERECO = f'{C["rua"]}, {C["bairro"]}, {C["cidade"]} - {C["uf"]}, CEP {C["cep"]
 MAPA = "https://www.google.com/maps/search/?api=1&query=" + quote(
     f'{C["rua"]}, {C["bairro"]}, {C["cidade"]} - {C["uf"]}, {C["cep"]}')
 
-ICONE_CHAT = ('<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" '
-              'd="M12 3C6.5 3 2 6.9 2 11.7c0 2.4 1.1 4.6 3 6.2L4.2 21l3.7-1.6c1.3.4 2.7.6 4.1.6 5.5 0 10-3.9 '
-              '10-8.7S17.5 3 12 3zm-4 9.9a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4zm4 0a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 '
-              '0 2.4zm4 0a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4z"/></svg>')
 ICONE_PIN = ('<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" '
              'd="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>')
 ICONE_RELOGIO = ('<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" '
                  'd="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 10.4 3.2 1.9-.8 1.3L11 13V7h2z"/></svg>')
 
 
+def icone_wa(prefixo, tam=20):
+    # Ícone oficial do WhatsApp (Brand Resource Center), versão branca.
+    return (f'<img class="ico-wa" src="{prefixo}assets/whatsapp-glyph-white.svg" alt="" '
+            f'width="{tam}" height="{tam}">')
+
+
 def link_wa(mensagem):
     return f'https://wa.me/{C["whatsapp"]}?text=' + quote(mensagem)
 
 
-def botao_wa(texto, classe="btn btn-wa"):
+def botao_wa(texto, classe="btn btn-wa", prefixo=""):
     return (f'<a class="{classe}" href="{link_wa(MSG_HOME)}" target="_blank" rel="noopener" data-wa '
-            f'data-servico="pagina principal">{ICONE_CHAT}<span>{E(texto)}</span></a>')
+            f'data-servico="pagina principal">{icone_wa(prefixo, 22)}<span>{E(texto)}</span></a>')
 
 
-def botao_flutuante():
+def botao_flutuante(prefixo=""):
     return (f'<a class="wa-flutuante" href="{link_wa(MSG_HOME)}" target="_blank" rel="noopener" data-wa '
             f'data-servico="pagina principal" aria-label="Falar com a Eko Clínica pelo WhatsApp">'
-            f'{ICONE_CHAT.replace("width=\"20\" height=\"20\"", "width=\"30\" height=\"30\"")}</a>')
+            f'{icone_wa(prefixo, 34)}</a>')
 
 
 def cabeca(titulo, descricao, caminho, prefixo, jsonld=None, classe_body=""):
@@ -109,7 +111,7 @@ def rodape(prefixo):
     <p><a href="{prefixo}privacidade/">Política de privacidade</a></p>
   </div>
 </footer>
-{botao_flutuante()}
+{botao_flutuante(prefixo)}
 </body>
 </html>
 """
@@ -241,7 +243,7 @@ def pagina_servico(t):
 {opcoes}
           <option value="uma avaliação">Outro / avaliação geral</option>
       </select>
-      <button type="submit" class="btn btn-wa btn-largo">{ICONE_CHAT}<span>Agendar pelo WhatsApp</span></button>
+      <button type="submit" class="btn btn-wa btn-largo">{icone_wa(p, 24)}<span>Agendar pelo WhatsApp</span></button>
       <p id="form-aviso" class="lp-aviso" role="status" aria-live="polite"></p>
     </form>
     <a id="wa-envio" class="oculto" href="https://wa.me/{C["whatsapp"]}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">WhatsApp</a>
