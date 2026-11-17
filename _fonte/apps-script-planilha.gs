@@ -6,10 +6,11 @@
  * Como instalar (uma vez):
  * 1. Abra a planilha > Extensões > Apps Script.
  * 2. Apague o conteúdo do arquivo Code.gs e cole este código. Salve.
- * 3. Implantar > Nova implantação > tipo "App da Web".
+ * 3. Selecione a função "autorizar" e clique em Executar (autoriza o acesso).
+ * 4. Implantar > Nova implantação > tipo "App da Web".
  *    Executar como: Eu. Quem pode acessar: Qualquer pessoa.
- * 4. Autorize o acesso e copie a URL que termina em /exec.
- * 5. Cole essa URL em ENDPOINT, no arquivo assets/site.js do site.
+ * 5. Copie a URL que termina em /exec.
+ * 6. Cole essa URL em ENDPOINT, no arquivo assets/site.js do site.
  *
  * O site envia só o código (ex.: EK7F3K), o GCLID e a página. Nenhum dado pessoal.
  */
@@ -39,6 +40,12 @@ function doPost(e) {
   } finally {
     try { lock.releaseLock(); } catch (e2) {}
   }
+}
+
+// Rode esta função uma vez pelo editor (botão Executar) para autorizar o acesso à planilha.
+function autorizar() {
+  const aba = SpreadsheetApp.openById(PLANILHA_ID).getSheetByName(ABA);
+  Logger.log('Acesso OK: ' + aba.getName());
 }
 
 function resposta(texto) {
