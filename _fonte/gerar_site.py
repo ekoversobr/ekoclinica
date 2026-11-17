@@ -15,6 +15,17 @@ sys.path.insert(0, os.path.join(RAIZ, "_fonte"))
 from conteudo import CLINICA as C, TRATAMENTOS, REDIRECIONAMENTOS, MSG_HOME  # noqa: E402
 
 E = html.escape
+
+
+def _versao(arquivo):
+    import hashlib
+    with open(os.path.join(RAIZ, "assets", arquivo), "rb") as f:
+        return hashlib.sha1(f.read()).hexdigest()[:8]
+
+
+# Versão nos links de CSS/JS para o navegador não usar arquivo antigo do cache.
+V_CSS = _versao("site.css")
+V_JS = _versao("site.js")
 ENDERECO = f'{C["rua"]}, {C["bairro"]}, {C["cidade"]} - {C["uf"]}, CEP {C["cep"]}'
 MAPA = "https://www.google.com/maps/search/?api=1&query=" + quote(
     f'{C["rua"]}, {C["bairro"]}, {C["cidade"]} - {C["uf"]}, {C["cep"]}')
@@ -76,8 +87,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="og:locale" content="pt_BR">
 <link rel="icon" href="{prefixo}assets/favicon-64.png" sizes="64x64">
 <link rel="apple-touch-icon" href="{prefixo}assets/apple-touch-icon.png">
-<link rel="stylesheet" href="{prefixo}assets/site.css">
-{ld}<script src="{prefixo}assets/site.js" defer></script>
+<link rel="stylesheet" href="{prefixo}assets/site.css?v={V_CSS}">
+{ld}<script src="{prefixo}assets/site.js?v={V_JS}" defer></script>
 </head>
 <body{body}>
 <!-- Google Tag Manager (noscript) -->
